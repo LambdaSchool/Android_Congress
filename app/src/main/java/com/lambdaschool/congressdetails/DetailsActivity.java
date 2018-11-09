@@ -5,7 +5,9 @@ import android.os.Bundle;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    public static final
+    public static final String CONGRESS_DETAILS_KEY = "congress_details";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
