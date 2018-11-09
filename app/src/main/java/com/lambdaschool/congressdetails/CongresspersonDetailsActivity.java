@@ -27,9 +27,9 @@ public class CongresspersonDetailsActivity extends AppCompatActivity {
 
         String id = getIntent().getStringExtra("PersonId");
         final String stateString = getIntent().getStringExtra("PersonState");
-        final int totalVotesNumber = getIntent().getIntExtra("PersonVotes", -1);
+        final String totalVotesNumber = getIntent().getStringExtra("PersonVotes");
 
-        if(id != null && stateString != null && totalVotesNumber != -1){
+        if(id != null && stateString != null && totalVotesNumber != null){
             viewModel = ViewModelProviders.of(this).get(CongresspersonDetailsViewModel.class);
             LiveData<CongresspersonDetails> liveDetails = viewModel.getDetails(id);
             liveDetails.observe(this, new Observer<CongresspersonDetails>() {

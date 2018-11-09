@@ -60,7 +60,7 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String id = congress.getId();
-                int votes = congress.getTotalVotes();
+                String votes = Integer.toString(congress.getTotalVotes());
                 Intent intent = new Intent(context, CongresspersonDetailsActivity.class);
                 intent.putExtra("PersonId", id);
                 intent.putExtra("PersonState", state);
