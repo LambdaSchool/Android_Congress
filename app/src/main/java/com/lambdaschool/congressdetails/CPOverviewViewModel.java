@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModel;
 import com.lambdaschool.congressdataapiaccess.CongresspersonOverview;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class CPOverviewViewModel extends ViewModel {
     private MutableLiveData<ArrayList<CongresspersonOverview>> overviewList;
@@ -14,6 +15,8 @@ public class CPOverviewViewModel extends ViewModel {
         if (overviewList == null) {
             loadList();
         }
+
+
         return overviewList;
     }
 

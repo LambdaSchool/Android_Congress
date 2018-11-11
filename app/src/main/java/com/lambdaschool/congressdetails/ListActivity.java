@@ -17,6 +17,7 @@ import com.lambdaschool.congressdataapiaccess.CongresspersonOverview;
 import android.arch.lifecycle.ViewModelProviders;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -38,7 +39,9 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable ArrayList<CongresspersonOverview> cpOverviews) {
                 if (cpOverviews != null) {
-                    for (CongresspersonOverview person : cpOverviews) {
+                    Collections.sort(cpOverviews,
+                            (o1, o2) -> o1.getState().compareTo(o2.getState()));
+                                        for (CongresspersonOverview person : cpOverviews) {
                         parentLayout.addView(getDefaultTextView(person));
                     }
                 }
