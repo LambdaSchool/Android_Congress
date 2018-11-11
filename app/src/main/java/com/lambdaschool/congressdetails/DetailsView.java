@@ -13,7 +13,7 @@ import com.lambdaschool.congressdataapiaccess.CongresspersonDetails;
 
 public class DetailsView extends AppCompatActivity {
 
-    TextView textName, textParty, textURL;
+    TextView textName, textParty, textURL, textVotePercent;
     CPDetailsViewModel viewModel;
 
     @Override
@@ -23,6 +23,8 @@ public class DetailsView extends AppCompatActivity {
         textName = findViewById(R.id.text_name);
         textParty = findViewById(R.id.text_party);
         textURL = findViewById(R.id.text_url);
+//        textVotePercent = findViewById(R.id.text_vote_with_party);
+
 
         String id = getIntent().getStringExtra("CPID");
 
@@ -34,8 +36,7 @@ public class DetailsView extends AppCompatActivity {
                     if (cpDetails != null) {
                         textName.setText(String.format("%s %s", cpDetails.getFirstName(), cpDetails.getLastName()));
                         String partyName = "";
-                        partyName = cpDetails.getCurrentParty().trim();
-                        Log.i("Test", ((Integer)partyName.indexOf('R')).toString());
+                        partyName = cpDetails.getCurrentParty();
                         if (partyName.equals("R")) {
                             partyName = "Republican";
                         } else if (partyName.equals("D")) {
