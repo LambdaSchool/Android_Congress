@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.lambdaschool.congressdataapiaccess.CongresspersonOverview;
 
+
 import android.arch.lifecycle.ViewModelProviders;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class ListActivity extends AppCompatActivity {
 
     TextView getDefaultTextView(final CongresspersonOverview person) {
         TextView view = new TextView(context);
-        String displayText = String.format("%s %s", person.getFirstName(), person.getLastName());
+        String displayText = String.format("%s %s (%s)", person.getFirstName(), person.getLastName(), person.getState());
         view.setText(displayText);
         view.setTextSize(28);
         view.setOnClickListener(new View.OnClickListener() {
