@@ -13,7 +13,7 @@ import com.lambdaschool.congressdataapiaccess.CongresspersonDetails;
 
 public class CongresspersonDetailsActivity extends AppCompatActivity {
 
-    private CongresspersonDetailsViewModel m_congresspersonDetailsViewModel;
+    private CongresspersonDetailsViewModel congresspersonDetailsViewModel;
     private LinearLayout m_congresspersonLinearLayout;
 
     @Override
@@ -23,16 +23,12 @@ public class CongresspersonDetailsActivity extends AppCompatActivity {
 
         m_congresspersonLinearLayout = findViewById(R.id.linear_layout_congressperson_details);
 
-        m_congresspersonDetailsViewModel = ViewModelProviders.of(this).get(CongresspersonDetailsViewModel.class);
+        congresspersonDetailsViewModel = ViewModelProviders.of(this).get(CongresspersonDetailsViewModel.class);
 
         Intent intent = getIntent();
-        Object congresspersonIdObj = intent.getSerializableExtra("congressperson id");
-        if (congresspersonIdObj != null) {
-            String congresspersonId = (String)congresspersonIdObj;
-            m_congresspersonDetailsViewModel.loadCongresspersonDetails(congresspersonId);
-        }
+        String congresspersonId = intent.getStringExtra(ListActivity.KEY_EXTRA_CONGRESSPERSON_ID);
 
-        m_congresspersonDetailsViewModel.getCongresspersonDetailsLD().observe(this, new CongresspersonDetailsObserver());
+        congresspersonDetailsViewModel.getCongresspersonDetailsLD(congresspersonId).observe(this, new CongresspersonDetailsObserver());
     }
 
     private class CongresspersonDetailsObserver implements Observer<CongresspersonDetails> {
@@ -43,14 +39,35 @@ public class CongresspersonDetailsActivity extends AppCompatActivity {
                 return;
             }
 
+            // full name
             TextView textViewFullName = new TextView(CongresspersonDetailsActivity.this);
-            String fullName = congresspersonDetails.getFirstName();
-            fullName += " " + congresspersonDetails.getMiddleName();
-            fullName += " " + congresspersonDetails.getLastName();
-            textViewFullName.setTextSize(25.f);
+            String fullName = "Name: ";
+            fullName += congresspersonDetails.getFirstName();
+            if (!congresspersonDetails.getMiddleName().equals("null")) {
+                fullName += " " + congresspersonDetails.getMiddleName();
+            }
+            if (!congresspersonDetails.getLastName().equals("null")) {
+                fullName += " " + congresspersonDetails.getLastName();
+            }
             textViewFullName.setText(fullName);
-
+            textViewFullName.setTextSize(25.f);
             m_congresspersonLinearLayout.addView(textViewFullName);
+
+            // party
+            TextView textViewParty = new TextView(CongresspersonDetailsActivity.this);
+            String party = "Party: ";
+            party += congresspersonDetails.getCurrentParty();
+            textViewParty.setText(party);
+            textViewParty.setTextSize(25.f);
+            m_congresspersonLinearLayout.addView(textViewParty);
+
+            // bInOffice
+            TextView textViewInOffice = new TextView(CongresspersonDetailsActivity.this);
+            String inOffice = "In office: ";
+            inOffice += congresspersonDetails.isInOffice() ? "Yes" : "No";
+            textViewInOffice.setText(inOffice);
+            textViewInOffice.setTextSize(25.f);
+            m_congresspersonLinearLayout.addView(textViewInOffice);
 
         }
     }
