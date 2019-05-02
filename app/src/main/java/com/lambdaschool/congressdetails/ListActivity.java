@@ -1,6 +1,9 @@
 package com.lambdaschool.congressdetails;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +20,7 @@ public class ListActivity extends AppCompatActivity {
     ArrayList<CongresspersonOverview> congressPeople;
     CongressPeopleListAdapter listAdapter;
     Context context;
+    private CongressViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,16 @@ public class ListActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setAdapter(listAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        viewModel = ViewModelProviders.of(this).get(CongressViewModel.class);
+        viewModel.getCongress().observe(this, new Observer<ArrayList<CongresspersonOverview>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<CongresspersonOverview> congresspersonOverviews) {
+                if(congresspersonOverviews != null) {
+                    congressPeople.addAll(congresspersonOverviews);
+                }
+                listAdapter.notifyDataSetChanged();
+            }
+        });
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -36,8 +50,8 @@ public class ListActivity extends AppCompatActivity {
                   @Override
                   public void run() {
                       for(CongresspersonOverview person: networkList){
-                          congressPeople.add(person);
-                          listAdapter.notifyItemChanged(congressPeople.size() - 1);
+                          viewModel.updateData(person);
+
                       }
                   }
               });
