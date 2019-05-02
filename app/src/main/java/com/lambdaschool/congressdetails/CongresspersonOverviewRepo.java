@@ -3,6 +3,7 @@ package com.lambdaschool.congressdetails;
 import android.arch.lifecycle.MutableLiveData;
 
 import com.lambdaschool.congressdataapiaccess.CongressDao;
+import com.lambdaschool.congressdataapiaccess.CongresspersonDetails;
 import com.lambdaschool.congressdataapiaccess.CongresspersonOverview;
 
 import java.util.ArrayList;
@@ -16,4 +17,6 @@ public class CongresspersonOverviewRepo {
         people.setValue(rawData);
         return people;
     }
+
+
 }

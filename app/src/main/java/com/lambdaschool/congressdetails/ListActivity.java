@@ -1,5 +1,6 @@
 package com.lambdaschool.congressdetails;
 
+import android.app.Activity;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
@@ -45,6 +46,7 @@ public class ListActivity extends AppCompatActivity implements View.OnClickListe
                         String temp = congresspersonOverview.getFirstName() + " " + congresspersonOverview.getLastName() + " " + congresspersonOverview.getTitle();
                         textView.setText(temp);
                         textView.setTag(congresspersonOverview.getId());
+                        textView.setOnClickListener((View.OnClickListener) context );
                         linearLayoutChild.addView(textView);
 
                     }
