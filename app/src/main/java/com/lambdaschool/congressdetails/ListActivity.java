@@ -37,7 +37,11 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable ArrayList<CongresspersonOverview> congresspersonOverviews) {
                 if(congresspersonOverviews != null) {
-                    congressPeople.addAll(congresspersonOverviews);
+                    for(CongresspersonOverview person: congresspersonOverviews){
+                        if(!congressPeople.contains(person)) {
+                            congressPeople.add(person);
+                        }
+                    }
                 }
                 listAdapter.notifyDataSetChanged();
             }
