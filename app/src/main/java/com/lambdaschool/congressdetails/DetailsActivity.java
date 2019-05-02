@@ -1,6 +1,9 @@
 package com.lambdaschool.congressdetails;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -18,19 +21,23 @@ public class DetailsActivity extends AppCompatActivity {
     TextView textTrackId;
     TextView textTwitter;
     TextView textFacebook;
-    TextView textState;
-    TextView textChamber;
-    TextView textStartDate;
-    TextView textEndDate;
-    TextView textOffice;
-    TextView textPhone;
     CongresspersonDetails person;
+    CongressPersonViewModel viewModel;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        viewModel = ViewModelProviders.of(this).get(CongressPersonViewModel.class);
+        viewModel.getPerson().observe(this, new Observer<CongresspersonDetails>() {
+            @Override
+            public void onChanged(@Nullable CongresspersonDetails congresspersonDetails) {
+                person = congresspersonDetails;
+                updateUI(person);
+            }
+        });
 
         Intent intent = getIntent();
         if(intent.getExtras() != null){
@@ -43,8 +50,7 @@ public class DetailsActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            person = networkPerson;
-                            updateUI(person);
+                           viewModel.updateData(networkPerson);
                         }
                     });
                 }
