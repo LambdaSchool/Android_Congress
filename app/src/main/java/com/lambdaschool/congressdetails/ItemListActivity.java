@@ -4,7 +4,6 @@ import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +37,8 @@ public class ItemListActivity extends AppCompatActivity {
     private boolean mTwoPane;
     private CPOViewModel viewModel;
     Context context;
+    RecyclerView recyclerView;
+    SimpleItemRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class ItemListActivity extends AppCompatActivity {
         viewModel.getLiveData(this).observe(this, new Observer<ArrayList<CongresspersonOverview>>() {
             @Override
             public void onChanged(@Nullable ArrayList<CongresspersonOverview> congresspersonOverviews) {
-
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -75,13 +76,11 @@ public class ItemListActivity extends AppCompatActivity {
             mTwoPane = true;
         }
 
-        View recyclerView = findViewById(R.id.item_list);
+        recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
-    }
-
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, viewModel.getLiveData(context).getValue(), mTwoPane));
+        adapter = new SimpleItemRecyclerViewAdapter(this,
+                viewModel.getLiveData(context).getValue(), mTwoPane);
+        recyclerView.setAdapter(adapter);
     }
 
     public static class SimpleItemRecyclerViewAdapter
@@ -93,10 +92,10 @@ public class ItemListActivity extends AppCompatActivity {
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CongresspersonOverview item = (CongresspersonOverview) view.getTag();
+                String item = (String) view.getTag();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item.getId());
+                    arguments.putString(ItemDetailFragment.ARG_ITEM_ID, item);
                     ItemDetailFragment fragment = new ItemDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -105,7 +104,7 @@ public class ItemListActivity extends AppCompatActivity {
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item.getId());
+                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, item);
 
                     context.startActivity(intent);
                 }
@@ -134,7 +133,7 @@ public class ItemListActivity extends AppCompatActivity {
             holder.state.setText(mValues.get(position).getState());
             holder.party.setText(mValues.get(position).getParty());
 
-            holder.itemView.setTag(mValues.get(position));
+            holder.itemView.setTag(mValues.get(position).getId());
             holder.itemView.setOnClickListener(mOnClickListener);
         }
 
