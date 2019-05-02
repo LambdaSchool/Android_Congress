@@ -1,13 +1,19 @@
 package com.lambdaschool.congressdetails;
 
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.lambdaschool.congressdataapiaccess.CongresspersonDetails;
 
 
 /**
@@ -27,6 +33,7 @@ public class ItemDetailFragment extends Fragment {
      * The dummy content this fragment is presenting.
      */
     private String mItem;
+    private DetailsViewModel detailsViewModel;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -51,17 +58,30 @@ public class ItemDetailFragment extends Fragment {
                 appBarLayout.setTitle(mItem);
             }
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.item_detail, container, false);
+        final View rootView = inflater.inflate(R.layout.item_detail, container, false);
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem);
+
         }
+        detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
+        detailsViewModel.getLiveData(getContext(), mItem ).observe(this, new Observer<CongresspersonDetails>() {
+            @Override
+            public void onChanged(@Nullable CongresspersonDetails congresspersonDetails) {
+                ((TextView) rootView.findViewById(R.id.item_detail)).setText(congresspersonDetails.getCrpId() + "\n" +
+                        congresspersonDetails.getCspanId() + "\n" +
+                        congresspersonDetails.getCurrentParty() + "\n" +
+                        congresspersonDetails.getDateOfBirth() + "\n" +
+                        congresspersonDetails.getFacebookAccount() + "\n" +
+                        congresspersonDetails.getGoogleEntityId());
+            }
+        });
 
         return rootView;
     }
